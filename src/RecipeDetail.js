@@ -1,7 +1,9 @@
 import React from "react";
 import { Link, useParams } from "react-router-dom";
 
-function RecipeDetail({ recipes, loggedin, deleteRecipe }) {
+import FormEditRecipe from "./FormEditRecipe";
+
+function RecipeDetail({ recipes, loggedin, deleteRecipe, editRecipe }) {
   const { recipeId } = useParams();
   const [recipeDeleted, setRecipeDeleted] = React.useState(false);
 
@@ -24,6 +26,7 @@ function RecipeDetail({ recipes, loggedin, deleteRecipe }) {
 
   return (
     <div>
+      <FormEditRecipe thisRecipe={thisRecipe} editRecipe={editRecipe} />
       <img src={`/img/${thisRecipe.image}`} alt={thisRecipe.title} />
       <h1>{thisRecipe.title}</h1>
       <p>{thisRecipe.description}</p>

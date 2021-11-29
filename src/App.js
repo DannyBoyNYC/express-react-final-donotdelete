@@ -7,12 +7,24 @@ import Recipes from "./Recipes";
 import RecipeDetail from "./RecipeDetail";
 import Nav from "./Nav";
 
+const reducer = (state, action) => {
+  switch (action) {
+    case "on":
+      return true;
+    case "off":
+      return false;
+    default:
+      return state;
+  }
+};
+
 function App() {
   const [loggedin, setLoggedin] = useToggle(true);
   const [recipes, setRecipes] = React.useState([]);
   const [loading, setLoading] = React.useState(false);
   const [error, setError] = React.useState("");
-  const { get, post, del } = useFetch(`/api/recipes`);
+  const { get, post, del, put } = useFetch(`/api/recipes`);
+  const [light, dispatch] = React.useReducer(reducer, true);
 
   /* eslint-disable react-hooks/exhaustive-deps */
   React.useEffect(() => {
@@ -31,8 +43,16 @@ function App() {
     });
   };
 
+  const editRecipe = (updatedRecipe) => {
+    console.log(updatedRecipe);
+    put(`/api/recipes/${updatedRecipe._id}`, updatedRecipe).then(
+      get("/api/recipes").then((data) => {
+        setRecipes(data);
+      })
+    );
+  };
+
   const deleteRecipe = (recipeId) => {
-    console.log("recipeId:", recipeId);
     del(`/api/recipes/${recipeId}`)
       .then(
         setRecipes((recipes) =>
@@ -55,9 +75,11 @@ function App() {
   }
 
   return (
-    <main>
+    <main className={light ? "lit" : "unlit"}>
       <BrowserRouter>
         <Nav setLoggedin={setLoggedin} loggedin={loggedin} />
+        <button onClick={() => dispatch("on")}>Light</button>
+        <button onClick={() => dispatch("off")}>Dark</button>
         <Routes>
           <Route
             path="/"
@@ -76,6 +98,7 @@ function App() {
                 recipes={recipes}
                 deleteRecipe={deleteRecipe}
                 loggedin={loggedin}
+                editRecipe={editRecipe}
               />
             }
           />

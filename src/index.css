@@ -47,3 +47,21 @@ button.delete {
   color: #007eb6;
   cursor: pointer;
 }
+
+/* dark/light */
+
+main.lit {
+  background-color: #fff;
+}
+
+.unlit {
+  background-color: #555;
+}
+
+.unlit {
+  color: #fff;
+}
+
+.unlit a {
+  color: #eee;
+}
